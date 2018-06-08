@@ -1,4 +1,4 @@
-# tropicalPy
+# TropicalPy
 
 A simple module for performing tropical (min-plus and max-plus) linear algebra operations with NumPy arrays (see reference below for more about tropical linear algebra).  Written in cython for a modest speed boost.
 
