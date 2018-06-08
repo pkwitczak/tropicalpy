@@ -5,7 +5,7 @@ A simple module for performing tropical (min-plus and max-plus) linear algebra o
 Example:
 
     >>> import numpy as np
-    >>> import tropicalPy as tp
+    >>> import tropicalpy as tp
 
     >>> A = np.array([[0,2,3],[4,0,6],[7,8,0]])
 
