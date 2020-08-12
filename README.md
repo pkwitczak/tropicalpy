@@ -18,10 +18,14 @@ Example:
 Although this module is implemented in cython for some minor speed gains, matrix multiplication is still O(n^3) and will perform badly for large matrices.
 
 To do:
-- Implement tropical eigenvalues, determinants, and rank.
-- Improve cython code.
+- move to C++
+- implement tropical eigenvalues, determinants, and rank.
+- improve matrix multiplication
+- improve cython code.
 
 ## References
+
+This is a fork from https://github.com/lane203j/tropicalpy by Jeremy Lane. 
 
 A good place to start learning about tropical linear algebra is
 

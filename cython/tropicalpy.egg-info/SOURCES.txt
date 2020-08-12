@@ -1,0 +1,6 @@
+setup.py
+tropicalpy.c
+tropicalpy.egg-info/PKG-INFO
+tropicalpy.egg-info/SOURCES.txt
+tropicalpy.egg-info/dependency_links.txt
+tropicalpy.egg-info/top_level.txt
