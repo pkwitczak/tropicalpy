@@ -31,3 +31,7 @@ A good place to start learning about tropical linear algebra is
 
 Maclagan D, Sturmfels B. "Introduction to Tropical Geometry." 2015
 
+# Installation
+
+PIP:
+ pip install git+http://https://github.com/pkwitczak/tropicalpy.git@dev#egg=tropicalpy
