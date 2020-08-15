@@ -34,4 +34,4 @@ Maclagan D, Sturmfels B. "Introduction to Tropical Geometry." 2015
 # Installation
 
 PIP:
- pip install git+http://https://github.com/pkwitczak/tropicalpy.git@dev#egg=tropicalpy
+ pip install git+https://github.com/pkwitczak/tropicalpy.git@dev#egg=tropicalpy
