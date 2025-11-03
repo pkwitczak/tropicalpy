@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Find the build subdirectory containing the compiled module
+BUILD_SUBDIR=$(find build -type d -name "lib.*" | head -n 1)
+
+if [ -z "$BUILD_SUBDIR" ]; then
+  echo "Build directory with compiled modules not found."
+  exit 1
+fi
+
+# Export PYTHONPATH to include the build subdir
+export PYTHONPATH="$(pwd)/$BUILD_SUBDIR:$PYTHONPATH"
+
+# Run tests using pytest (adjust path if necessary)
+pytest tests/test_basic.py
