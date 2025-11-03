@@ -1,3 +1,5 @@
+[![.github/workflows/tests.yml](https://github.com/pkwitczak/tropicalpy/actions/workflows/tests.yml/badge.svg?branch=dev&event=check_run)](https://github.com/pkwitczak/tropicalpy/actions/workflows/tests.yml)
+
 # TropicalPy
 
 A simple module for performing tropical (min-plus and max-plus) linear algebra operations with NumPy arrays (see reference below for more about tropical linear algebra).  Written in cython for a modest speed boost.
