@@ -3,5 +3,5 @@
 !tests/*.py
 .*
 !.devcontainer/
-!.github
+!.github/
 !.gitignore
