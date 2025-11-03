@@ -3,4 +3,3 @@ requests
 pandas
 Cython
 setuptools
-pyximport
