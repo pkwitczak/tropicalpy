@@ -17,6 +17,6 @@ jobs:
           python setup.py build_ext
       - name: Run tests
         run: pytest
-        env: |
+        env: 
           PYTHONPATH: ${{ github.workspace }}/build
     
