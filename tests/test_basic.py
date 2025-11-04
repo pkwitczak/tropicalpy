@@ -4,6 +4,9 @@ import numpy as np
 import sys
 import os
 
+import pyximport
+pyximport.install()
+
 import tropicalpy
 
 class TestTropicalPy(unittest.TestCase):
