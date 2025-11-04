@@ -1,4 +1,5 @@
-[![.github/workflows/tests.yml](https://github.com/pkwitczak/tropicalpy/actions/workflows/tests.yml/badge.svg?branch=dev&event=check_run)](https://github.com/pkwitczak/tropicalpy/actions/workflows/tests.yml)
+[![Python CI](https://github.com/pkwitczak/tropicalpy/actions/workflows/tests.yml/badge.svg)](https://github.com/pkwitczak/tropicalpy/actions/workflows/tests.yml)
+
 
 # TropicalPy
 
