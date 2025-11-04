@@ -16,6 +16,7 @@ jobs:
         run: |
           python setup.py build_ext
       - name: Run tests
-        run: pytest
-        env:
-          PYTHONPATH: ${{github.workspace}}/build/lib.*
+        run: |
+          BUILD_LIB=$(find build -type d -name "lib.*" | head -n 1)
+          echo "Build directory: $BUILD_LIB"
+          PYTHONPATH=$BUILD_LIB:. pytest
