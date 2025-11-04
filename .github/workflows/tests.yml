@@ -19,3 +19,5 @@ jobs:
           python setup.py build_ext
       - name: Run tests
         run: ./run_tests
+        env:
+          PYTHONPATH: ${{github.workspace}}/build/lib.*
