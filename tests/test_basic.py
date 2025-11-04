@@ -4,16 +4,9 @@ import numpy as np
 import sys
 import os
 
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import pyximport
-
-# Add the 'build' directory where your .pyx file resides
-build_dir = os.path.abspath('build')
-sys.path.insert(0, build_dir)
-
-# Enable pyximport to compile and load .pyx files on import
 pyximport.install()
-
-
 import tropicalpy
 
 class TestTropicalPy(unittest.TestCase):
