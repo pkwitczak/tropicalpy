@@ -11,13 +11,17 @@ jobs:
         with:
           fetch-depth: 0
       - name: TODO to Issue
-        uses: alstr/todo-to-issue-action@v4
+        uses: alstr/todo-to-issue-action@v4.4
+        id: todo
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           AUTO_ASSIGN: true
-          IDENTIFIERS: '[{"name": "TODO", "labels": ["todo"]}, {"name": "FIXME", "labels": ["bug"]}]'
+          IDENTIFIERS: '[{"name": "TODO:", "labels": ["todo"]}, {"name": "FIXME:", "labels": ["bug"]}]'
           CLOSE_ISSUES: true
           AUTO_P: true
           COMMENT_MARKER: "#"
           LANGUAGES: "python,markdown"
+      - name: Debug Info
+        run: |
+          echo "Found TODOs: ${{ steps.todo.outputs.number_of_todos }}"
