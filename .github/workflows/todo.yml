@@ -1,0 +1,13 @@
+name: Todo Issue Bot
+
+on: push
+
+jobs:
+  todo-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Issue Bot
+        uses: juulsn/todo-issue@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
