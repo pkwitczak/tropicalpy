@@ -10,28 +10,23 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Debug Git Info
-        run: |
-          echo "Current commit: $(git rev-parse HEAD)"
-          echo "Previous commit: $(git rev-parse HEAD^)"
-          echo "Branch: $(git branch --show-current)"
           
       - name: Show TODOs
         run: |
-          echo "TODOs found in Python and Cython files:"
-          grep -r "TODO" . --include="*.py" --include="*.pyx" || true
-          echo -e "\nTODOs found in Markdown files:"
-          grep -r "TODO" . --include="*.md" || true
+          echo "=== TODOs in Python files ==="
+          find . -name "*.py" -not -path "./build/*" -exec grep -l "TODO" {} \; || true
+          echo -e "\n=== TODOs in Cython files ==="
+          find . -name "*.pyx" -not -path "./build/*" -exec grep -l "TODO" {} \; || true
+          echo -e "\n=== TODOs in Markdown files ==="
+          find . -name "*.md" -exec grep -l "TODO" {} \; || true
           
       - name: TODO to Issue
-        uses: "alstr/todo-to-issue-action@v4.6"  # Using specific version instead of master
-        id: todo
+        uses: "alstr/todo-to-issue-action@v4.6"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           CLOSE_ISSUES: true
           AUTO_P: true
           AUTO_ASSIGN: true
-          IDENTIFIERS: '[{"name": "TODO", "labels": ["todo"]}, {"name": "FIXME", "labels": ["fix"]}]'
-          NO_STANDARD: false
-          ESCAPE: true
+          LABEL: "todo"
+          COMMENT_MARKER: "#"
