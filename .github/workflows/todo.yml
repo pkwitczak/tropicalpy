@@ -10,6 +10,12 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Show TODOs before action
+        run: |
+          echo "TODOs found in Python files:"
+          grep -r "TODO" . --include="*.py" || true
+          echo -e "\nTODOs found in Markdown files:"
+          grep -r "TODO" . --include="*.md" || true
       - name: TODO to Issue
         uses: alstr/todo-to-issue-action@master
         id: todo
@@ -19,8 +25,7 @@ jobs:
           CLOSE_ISSUES: true
           AUTO_P: true
           AUTO_ASSIGN: true
+          IDENTIFIERS: '[{"name": "TODO", "labels": ["todo"]}, {"name": "FIXME", "labels": ["fix"]}]'
           LANGUAGES: "python,markdown"
-          NO_STANDARD: false
-      - name: Debug Info
-        run: |
-          echo "Found TODOs: ${{ steps.todo.outputs.number_of_todos }}"
+          GITHUB_URL: "https://github.com"
+          GITHUB_SERVER_URL: "https://github.com"
