@@ -41,7 +41,6 @@ jobs:
         uses: "alstr/todo-to-issue-action@v4.6"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CLOSE_ISSUES: true
@@ -53,6 +52,8 @@ jobs:
 
       - name: Verify Issues
         if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           echo "Checking created/updated issues..."
           gh issue list --label todo
