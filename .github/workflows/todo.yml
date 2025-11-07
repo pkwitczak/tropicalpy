@@ -6,12 +6,21 @@ jobs:
     permissions:
       issues: write
       contents: read
+      pull-requests: write
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Debug Git Info
+        run: |
+          echo "Current branch: $(git branch --show-current)"
+          echo "Current commit: $(git rev-parse HEAD)"
+          echo "Repository: $GITHUB_REPOSITORY"
           
       - name: Show TODOs with Context
+        id: todo-find
         run: |
           echo "=== TODOs in Python/Cython files ==="
           for ext in "py" "pyx"; do
@@ -21,30 +30,29 @@ jobs:
                   echo "File: $file"
                   grep -n "TODO" "$file" | while read -r line; do
                     echo "  $line"
+                    echo "$file:$line" >> $GITHUB_WORKSPACE/todos.txt
                   done
                 fi
               done
             ' sh {} + || true
           done
           
-          echo -e "\n=== TODOs in Markdown files ==="
-          find . -name "*.md" -exec sh -c '
-            for file in "$@"; do
-              if grep -l "TODO" "$file" > /dev/null; then
-                echo "File: $file"
-                grep -n "TODO" "$file"
-              fi
-            done
-          ' sh {} + || true
-          
       - name: TODO to Issue
         uses: "alstr/todo-to-issue-action@v4.6"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CLOSE_ISSUES: true
           AUTO_P: true
           AUTO_ASSIGN: true
           LABEL: "todo"
           COMMENT_MARKER: "#"
           IGNORE: "build/,dist/"
+
+      - name: Verify Issues
+        if: always()
+        run: |
+          echo "Checking created/updated issues..."
+          gh issue list --label todo
