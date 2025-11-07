@@ -26,6 +26,9 @@ To do:
 - improve matrix multiplication
 - improve cython code.
 
+##
+
+
 ## References
 
 This is a fork from https://github.com/lane203j/tropicalpy by Jeremy Lane. 
