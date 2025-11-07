@@ -11,14 +11,31 @@ jobs:
         with:
           fetch-depth: 0
           
-      - name: Show TODOs
+      - name: Show TODOs with Context
         run: |
-          echo "=== TODOs in Python files ==="
-          find . -name "*.py" -not -path "./build/*" -exec grep -l "TODO" {} \; || true
-          echo -e "\n=== TODOs in Cython files ==="
-          find . -name "*.pyx" -not -path "./build/*" -exec grep -l "TODO" {} \; || true
+          echo "=== TODOs in Python/Cython files ==="
+          for ext in "py" "pyx"; do
+            find . -name "*.$ext" -not -path "./build/*" -exec sh -c '
+              for file in "$@"; do
+                if grep -l "TODO" "$file" > /dev/null; then
+                  echo "File: $file"
+                  grep -n "TODO" "$file" | while read -r line; do
+                    echo "  $line"
+                  done
+                fi
+              done
+            ' sh {} + || true
+          done
+          
           echo -e "\n=== TODOs in Markdown files ==="
-          find . -name "*.md" -exec grep -l "TODO" {} \; || true
+          find . -name "*.md" -exec sh -c '
+            for file in "$@"; do
+              if grep -l "TODO" "$file" > /dev/null; then
+                echo "File: $file"
+                grep -n "TODO" "$file"
+              fi
+            done
+          ' sh {} + || true
           
       - name: TODO to Issue
         uses: "alstr/todo-to-issue-action@v4.6"
@@ -30,3 +47,4 @@ jobs:
           AUTO_ASSIGN: true
           LABEL: "todo"
           COMMENT_MARKER: "#"
+          IGNORE: "build/,dist/"
