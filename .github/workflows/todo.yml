@@ -1,13 +1,15 @@
-name: Todo Issue Bot
-
-on: push
-
+name: "TODO to Issue"
+on: ["push"]
 jobs:
-  todo-issue:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Run Issue Bot
-        uses: juulsn/todo-issue@main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: TODO to Issue
+        uses: alstr/todo-to-issue-action@v4
+        with:
+          AUTO_ASSIGN: true
+          IDENTIFIERS: '[{"name": "TODO", "labels": ["todo"]}, {"name": "FIXME", "labels": ["bug"]}]'
+          COLLECTIONS_KEYWORD: "collection:"
+          CLOSE_ISSUES: true
+          AUTO_P: true
