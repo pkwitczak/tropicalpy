@@ -13,7 +13,7 @@ jobs:
       - name: Show TODOs before action
         run: |
           echo "TODOs found in Python files:"
-          grep -r "TODO" . --include="*.py" || true
+          grep -r "TODO" . --include="*.py" --include="*.pyx" || true
           echo -e "\nTODOs found in Markdown files:"
           grep -r "TODO" . --include="*.md" || true
       - name: TODO to Issue
