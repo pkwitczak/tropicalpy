@@ -3,13 +3,21 @@ on: ["push"]
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: TODO to Issue
         uses: alstr/todo-to-issue-action@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           AUTO_ASSIGN: true
           IDENTIFIERS: '[{"name": "TODO", "labels": ["todo"]}, {"name": "FIXME", "labels": ["bug"]}]'
           COLLECTIONS_KEYWORD: "collection:"
           CLOSE_ISSUES: true
           AUTO_P: true
+          LOG_LEVEL: debug
