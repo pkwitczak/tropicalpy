@@ -11,19 +11,16 @@ jobs:
         with:
           fetch-depth: 0
       - name: TODO to Issue
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-      - uses: alstr/todo-to-issue-action@master
+        uses: alstr/todo-to-issue-action@master
         id: todo
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          COMMENT_MARKER: "#"
           CLOSE_ISSUES: true
           AUTO_P: true
           AUTO_ASSIGN: true
-          LABEL: "todo"
+          LANGUAGES: "python,markdown"
+          NO_STANDARD: false
       - name: Debug Info
         run: |
           echo "Found TODOs: ${{ steps.todo.outputs.number_of_todos }}"
