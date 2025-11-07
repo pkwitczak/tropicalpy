@@ -17,7 +17,7 @@ jobs:
         with:
           AUTO_ASSIGN: true
           IDENTIFIERS: '[{"name": "TODO", "labels": ["todo"]}, {"name": "FIXME", "labels": ["bug"]}]'
-          COLLECTIONS_KEYWORD: "collection:"
           CLOSE_ISSUES: true
           AUTO_P: true
-          LOG_LEVEL: debug
+          COMMENT_MARKER: "#"
+          LANGUAGES: "python,markdown"
