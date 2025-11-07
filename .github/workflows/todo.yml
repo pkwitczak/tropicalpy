@@ -16,12 +16,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          AUTO_ASSIGN: true
-          IDENTIFIERS: '[{"name": "TODO:", "labels": ["todo"]}, {"name": "FIXME:", "labels": ["bug"]}]'
+          COMMENT_MARKER: "#"
           CLOSE_ISSUES: true
           AUTO_P: true
-          COMMENT_MARKER: "#"
-          LANGUAGES: "python,markdown"
+          AUTO_ASSIGN: true
+          LABEL: "todo"
       - name: Debug Info
         run: |
           echo "Found TODOs: ${{ steps.todo.outputs.number_of_todos }}"
