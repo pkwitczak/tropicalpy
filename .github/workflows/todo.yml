@@ -26,6 +26,6 @@ jobs:
           AUTO_P: true
           AUTO_ASSIGN: true
           IDENTIFIERS: '[{"name": "TODO", "labels": ["todo"]}, {"name": "FIXME", "labels": ["fix"]}]'
-          LANGUAGES: "python,markdown,cython"
+          LANGUAGES: "python,markdown"
           GITHUB_URL: "https://github.com"
           GITHUB_SERVER_URL: "https://github.com"
