@@ -15,22 +15,29 @@ jobs:
         run: sudo apt install -y gh
 
       - name: Scan for TODOs and create issues
-        run: |
-          set -eux  # enable debugging and error exit
-          for ext in "py" "pyx"; do
-            echo "Searching *.$ext files..."
-            find . -name "*.$ext" -not -path "./build/*" -exec sh -c '
-              for file in "$@"; do
-                if grep -l "TODO:" "$file" > /dev/null; then
-                  echo "File: $file"
-                  grep -n "TODO:" "$file" | while read -r line; do
-                    line_number=$(echo "$line" | cut -d: -f1)
-                    todo_text=$(echo "$line" | sed -n "s/.*TODO:[[:space:]]*//p")
-                    echo "Creating GitHub issue for TODO: $todo_text"
-                    # No error suppression so you can see problems
-                    gh issue create --title "$todo_text" --body "" || true
-                  done
-                fi
-              done
-            ' sh {} +
-          done
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_REPO: ${{ github.repository }}
+      run: |
+        set -eux
+        for ext in "py" "pyx"; do
+          echo "Searching *.$ext files..."
+          find . -name "*.$ext" -not -path "./build/*" -exec sh -c '
+            for file in "$@"; do
+              if grep -l "TODO:" "$file" > /dev/null; then
+                echo "File: $file"
+                grep -n "TODO:" "$file" | while read -r line; do
+                  line_number=$(echo "$line" | cut -d: -f1)
+                  todo_text=$(echo "$line" | sed -n "s/.*TODO:[[:space:]]*//p")
+                  echo "TODO text: \"$todo_text\""
+                  if [ -z "$todo_text" ]; then
+                    echo "Skipping empty TODO"
+                    continue
+                  fi
+                  echo "Creating GitHub issue for TODO: $todo_text"
+                  gh issue create --title "$todo_text" --body "" --repo "$GH_REPO"
+                done
+              fi
+            done
+          ' sh {} +
+        done
