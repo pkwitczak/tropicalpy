@@ -7,12 +7,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
-      - name: Set up GitHub CLI
-        uses: cli/gh-action@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Scan for TODOs and create issues
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
