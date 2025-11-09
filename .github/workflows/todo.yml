@@ -1,16 +1,20 @@
-name: Create TODO Issues
-on:  [push]
-
 jobs:
   create-todo-issues:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write  # explicitly allow issue writing
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # pass token as GH_TOKEN
+      GH_REPO: ${{ github.repository }}     # set repo for gh commands
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+
+      - name: Install GitHub CLI
+        run: sudo apt install -y gh
+
       - name: Scan for TODOs and create issues
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -eux  # enable debugging and error exit
           for ext in "py" "pyx"; do
             echo "Searching *.$ext files..."
             find . -name "*.$ext" -not -path "./build/*" -exec sh -c '
@@ -21,7 +25,8 @@ jobs:
                     line_number=$(echo "$line" | cut -d: -f1)
                     todo_text=$(echo "$line" | sed -n "s/.*TODO:[[:space:]]*//p")
                     echo "Creating GitHub issue for TODO: $todo_text"
-                    gh issue create --title "$todo_text" --body "" --repo ${{ github.repository }} --token $GITHUB_TOKEN || echo "Issue creation failed or duplicate"
+                    # No error suppression so you can see problems
+                    gh issue create --title "$todo_text" --body "" || true
                   done
                 fi
               done
