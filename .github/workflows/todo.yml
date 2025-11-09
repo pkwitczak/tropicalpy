@@ -16,7 +16,7 @@ jobs:
           sudo apt install -y gh
           gh --version
 
-      - name: Scan for TODOs and create issues
+      - name: Scan for TODOs and create issues without duplicates
         run: |
           set -eux
           for ext in "py" "pyx"; do
@@ -26,15 +26,19 @@ jobs:
                 if grep -l "TODO:" "$file" > /dev/null; then
                   echo "File: $file"
                   grep -n "TODO:" "$file" | while read -r line; do
-                    line_number=$(echo "$line" | cut -d: -f1)
                     todo_text=$(echo "$line" | sed -n "s/.*TODO:[[:space:]]*//p")
                     echo "TODO text: \"$todo_text\""
                     if [ -z "$todo_text" ]; then
                       echo "Skipping empty TODO"
                       continue
                     fi
-                    echo "Creating GitHub issue for TODO: $todo_text"
-                    gh issue create --title "$todo_text" --body "" --repo "$GH_REPO"
+                    issue_exists=$(gh issue list --repo "$GH_REPO" --state open --search "$todo_text" --json number,title --jq ".[] | select(.title==\"$todo_text\") | .number" || echo "")
+                    if [ -n "$issue_exists" ]; then
+                      echo "Issue already exists for TODO: $todo_text, skipping."
+                    else
+                      echo "Creating GitHub issue for TODO: $todo_text"
+                      gh issue create --title "$todo_text" --body "" --repo "$GH_REPO"
+                    fi
                   done
                 fi
               done
