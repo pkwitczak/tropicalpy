@@ -9,7 +9,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up GitHub CLI
-        uses: cli/cli@v3 # Official GitHub CLI Action (optional if CLI already installed)
+        uses: cli/gh-action@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Scan for TODOs and create issues
         env:
