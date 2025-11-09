@@ -1,23 +1,25 @@
-name: "TODO to Issue"
-on: ["push"]
+name: Create TODO Issues
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
 jobs:
-  build:
+  create-todo-issues:
     runs-on: ubuntu-latest
-    permissions:
-      issues: write
-      contents: read
-      pull-requests: write
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-          
-          
-      - name: Show TODOs with Context
-        id: todo-find
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up GitHub CLI
+        uses: cli/cli@v3 # Official GitHub CLI Action (optional if CLI already installed)
+
+      - name: Scan for TODOs and create issues
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "=== TODOs in Python/Cython files ==="
           for ext in "py" "pyx"; do
             echo "Searching *.$ext files..."
             find . -name "*.$ext" -not -path "./build/*" -exec sh -c '
@@ -26,12 +28,11 @@ jobs:
                   echo "File: $file"
                   grep -n "TODO:" "$file" | while read -r line; do
                     line_number=$(echo "$line" | cut -d: -f1)
-                    # Extract the text after "TODO:" (trim leading spaces)
                     todo_text=$(echo "$line" | sed -n "s/.*TODO:[[:space:]]*//p")
                     echo "Creating GitHub issue for TODO: $todo_text"
-                    gh issue create --title "$todo_text" --body ""
+                    gh issue create --title "$todo_text" --body "" --repo ${{ github.repository }} --token $GITHUB_TOKEN || echo "Issue creation failed or duplicate"
                   done
                 fi
               done
-            ' sh {} + || true
+            ' sh {} +
           done
