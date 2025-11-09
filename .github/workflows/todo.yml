@@ -1,3 +1,5 @@
+name: Generate issues for TODOs
+on: [push, pull_request]
 jobs:
   create-todo-issues:
     runs-on: ubuntu-latest
