@@ -13,63 +13,25 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
           
-      - name: Debug Git Info
-        run: |
-          echo "Current branch: $(git branch --show-current)"
-          echo "Current commit: $(git rev-parse HEAD)"
-          echo "Repository: $GITHUB_REPOSITORY"
           
       - name: Show TODOs with Context
         id: todo-find
         run: |
           echo "=== TODOs in Python/Cython files ==="
-          # Create todos file
-          touch $GITHUB_WORKSPACE/todos.txt
-          
           for ext in "py" "pyx"; do
             echo "Searching *.$ext files..."
             find . -name "*.$ext" -not -path "./build/*" -exec sh -c '
               for file in "$@"; do
-                if grep -l "TODO" "$file" > /dev/null; then
+                if grep -l "TODO:" "$file" > /dev/null; then
                   echo "File: $file"
-                  grep -n "TODO" "$file" | while read -r line; do
-                    echo "  $line"
-                    echo "$file:$line" >> $GITHUB_WORKSPACE/todos.txt
+                  grep -n "TODO:" "$file" | while read -r line; do
+                    line_number=$(echo "$line" | cut -d: -f1)
+                    # Extract the text after "TODO:" (trim leading spaces)
+                    todo_text=$(echo "$line" | sed -n "s/.*TODO:[[:space:]]*//p")
+                    echo "Creating GitHub issue for TODO: $todo_text"
+                    gh issue create --title "$todo_text" --body ""
                   done
                 fi
               done
             ' sh {} + || true
           done
-          
-          echo "Found TODOs:"
-          cat $GITHUB_WORKSPACE/todos.txt || echo "No TODOs found"
-          
-      - name: TODO to Issue
-        uses: "alstr/todo-to-issue-action@v4.6"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CLOSE_ISSUES: true
-          AUTO_P: true
-          AUTO_ASSIGN: true
-          LABEL: "todo"
-          COMMENT_MARKER: "#"
-          IGNORE: "build/,dist/"
-          OUTPUT_ONLY: false
-          NO_EMPTY_BODY: true
-
-      - name: Verify Issues
-        if: always()
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          echo "Checking created/updated issues..."
-          gh issue list --label todo --json number,title,state
-          
-      - name: Check for Errors
-        if: failure()
-        run: |
-          echo "Workflow failed. Checking error logs..."
-          echo "TODO file contents:"
-          cat $GITHUB_WORKSPACE/todos.txt || echo "todos.txt not found"
