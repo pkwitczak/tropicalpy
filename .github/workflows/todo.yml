@@ -23,7 +23,11 @@ jobs:
         id: todo-find
         run: |
           echo "=== TODOs in Python/Cython files ==="
+          # Create todos file
+          touch $GITHUB_WORKSPACE/todos.txt
+          
           for ext in "py" "pyx"; do
+            echo "Searching *.$ext files..."
             find . -name "*.$ext" -not -path "./build/*" -exec sh -c '
               for file in "$@"; do
                 if grep -l "TODO" "$file" > /dev/null; then
@@ -37,6 +41,9 @@ jobs:
             ' sh {} + || true
           done
           
+          echo "Found TODOs:"
+          cat $GITHUB_WORKSPACE/todos.txt || echo "No TODOs found"
+          
       - name: TODO to Issue
         uses: "alstr/todo-to-issue-action@v4.6"
         env:
@@ -49,6 +56,8 @@ jobs:
           LABEL: "todo"
           COMMENT_MARKER: "#"
           IGNORE: "build/,dist/"
+          OUTPUT_ONLY: false
+          NO_EMPTY_BODY: true
 
       - name: Verify Issues
         if: always()
@@ -56,4 +65,11 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           echo "Checking created/updated issues..."
-          gh issue list --label todo
+          gh issue list --label todo --json number,title,state
+          
+      - name: Check for Errors
+        if: failure()
+        run: |
+          echo "Workflow failed. Checking error logs..."
+          echo "TODO file contents:"
+          cat $GITHUB_WORKSPACE/todos.txt || echo "todos.txt not found"
