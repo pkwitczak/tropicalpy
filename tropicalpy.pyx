@@ -96,6 +96,7 @@ def det(DTYPE [:,:] A,bool max_plus=False):
 
 def eig(DTYPE [:,:] A, bool max_plus=False):
     #TODO: implement eigenvalues
+    #test
     pass
     return None
 
