@@ -1,0 +1,38 @@
+Run python setup.py build_ext
+
+Error compiling Cython file:
+------------------------------------------------------------
+...
+
+    return Aplus
+
+
+
+def det(DTYPE [:,:] A,bool max_plus=False):
+        ^
+------------------------------------------------------------
+tropicalpy.pyx:92:8: 'DTYPE' is not a type identifier
+
+Error compiling Cython file:
+------------------------------------------------------------
+...
+def det(DTYPE [:,:] A,bool max_plus=False):
+    #TODO: implement determinant
+    pass
+    return None
+
+def eig(DTYPE [:,:] A, bool max_plus=False):
+        ^
+------------------------------------------------------------
+tropicalpy.pyx:97:8: 'DTYPE' is not a type identifier
+Traceback (most recent call last):
+Compiling tropicalpy.pyx because it changed.
+  File "/home/runner/work/tropicalpy/tropicalpy/setup.py", line 10, in <module>
+    ext_modules=cythonize("tropicalpy.pyx"),
+  File "/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/Cython/Build/Dependencies.py", line 1153, in cythonize
+[1/1] Cythonizing tropicalpy.pyx
+    cythonize_one(*args)
+  File "/opt/hostedtoolcache/Python/3.10.19/x64/lib/python3.10/site-packages/Cython/Build/Dependencies.py", line 1297, in cythonize_one
+    raise CompileError(None, pyx_file)
+Cython.Compiler.Errors.CompileError: tropicalpy.pyx
+Error: Process completed with exit code 1.
