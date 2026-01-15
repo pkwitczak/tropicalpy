@@ -89,12 +89,12 @@ def kleenePlus(np.ndarray A, bool max_plus=False):
 
 
 
-def det(DTYPE [:,:] A,bool max_plus=False):
+def det(DTYPE_t [:,:] A,bool max_plus=False):
     #TODO: implement determinant
     pass
     return None
 
-def eig(DTYPE [:,:] A, bool max_plus=False):
+def eig(DTYPE_t [:,:] A, bool max_plus=False):
     #TODO: implement eigenvalues
     #test
     pass
